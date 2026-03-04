@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>QuickFix – Book Home Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF6B2B;
+  --primary-dark: #e55a1f;
+  --secondary: #1A1A2E;
+  --accent: #FFD700;
+  --bg: #F7F4F0;
+  --white: #ffffff;
+  --text: #1A1A2E;
+  --text-light: #6B7280;
+  --card: #ffffff;
+  --success: #10B981;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+}	∙	{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+overflow-x: hidden;
+}
+/* SCREENS */
+.screen { display:none; min-height:100vh; flex-direction:column; }
+.screen.active { display:flex; }
+/* ===== SPLASH ===== */
+#splash {
+background: linear-gradient(135deg, #FF6B2B 0%, #FF8C42 50%, #FFB347 100%);
+align-items:center; justify-content:center; flex-direction:column; gap:16px;
+animation: splashIn 0.5s ease;
+}
+@keyframes splashIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+.splash-logo { font-family:‘Syne’,sans-serif; font-size:52px; font-weight:800; color:#fff; letter-spacing:-1px; }
+.splash-logo span { color: var(–accent); }
+.splash-sub { color:rgba(255,255,255,0.85); font-size:15px; letter-spacing:1px; }
+.splash-icon { font-size:64px; margin-bottom:8px; animation: bounce 1s ease infinite alternate; }
+@keyframes bounce { from{transform:translateY(0)} to{transform:translateY(-10px)} }
+/* ===== ROLE SELECT ===== */
+#roleSelect {
+background: var(–secondary);
+align-items:center; justify-content:center; flex-direction:column; gap:24px; padding:40px 24px;
+}
+.role-title { font-family:‘Syne’,sans-serif; font-size:28px; font-weight:800; color:#fff; text-align:center; line-height:1.2; }
+.role-title span { color:var(–primary); }
+.role-cards { display:flex; flex-direction:column; gap:16px; width:100%; max-width:340px; }
+.role-card {
+background: rgba(255,255,255,0.06);
+border: 2px solid rgba(255,255,255,0.1);
+border-radius:20px; padding:24px;
+display:flex; align-items:center; gap:16px;
+cursor:pointer; transition:all 0.25s ease;
+}
+.role-card:hover, .role-card:active { background:rgba(255,107,43,0.2); border-color:var(–primary); transform:scale(1.02); }
+.role-icon { font-size:36px; }
+.role-info h3 { font-family:‘Syne’,sans-serif; font-size:18px; font-weight:700; color:#fff; }
+.role-info p { font-size:13px; color:rgba(255,255,255,0.6); margin-top:2px; }
+.role-arrow { margin-left:auto; color:var(–primary); font-size:20px; }
+/* ===== TOP BAR ===== */
+.topbar {
+background:var(–white);
+padding:16px 20px;
+display:flex; align-items:center; gap:12px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+position:sticky; top:0; z-index:100;
+}
+.topbar-back { font-size:22px; cursor:pointer; color:var(–text); background:none; border:none; padding:4px; }
+.topbar-title { font-family:‘Syne’,sans-serif; font-size:18px; font-weight:700; flex:1; }
+.topbar-action { font-size:20px; cursor:pointer; }
+/* ===== CUSTOMER HOME ===== */
+#customerHome { background:var(–bg); }
+.home-header {
+background: linear-gradient(135deg, #FF6B2B, #FF8C42);
+padding:24px 20px 32px;
+color:#fff;
+}
+.home-greeting { font-size:14px; opacity:0.85; margin-bottom:4px; }
+.home-name { font-family:‘Syne’,sans-serif; font-size:24px; font-weight:800; margin-bottom:16px; }
+.search-bar {
+background:#fff;
+border-radius:14px;
+padding:12px 16px;
+display:flex; align-items:center; gap:10px;
+box-shadow:0 4px 16px rgba(0,0,0,0.15);
+}
+.search-bar input {
+border:none; outline:none; font-size:14px; flex:1;
+font-family:‘DM Sans’,sans-serif; color:var(–text);
+background:transparent;
+}
+.search-bar span { font-size:18px; }
+.section { padding:20px; }
+.section-title { font-family:‘Syne’,sans-serif; font-size:18px; font-weight:700; margin-bottom:14px; }
+/* Service Categories */
+.categories { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.cat-item {
+background:var(–white);
+border-radius:16px;
+padding:14px 8px;
+text-align:center;
+cursor:pointer;
+transition:all 0.2s ease;
+box-shadow:var(–shadow);
+}
+.cat-item:hover, .cat-item:active { transform:scale(1.05); box-shadow:var(–shadow-lg); }
+.cat-item.selected { background:var(–primary); }
+.cat-item.selected .cat-label { color:#fff; }
+.cat-emoji { font-size:28px; display:block; margin-bottom:6px; }
+.cat-label { font-size:11px; font-weight:600; color:var(–text-light); }
+/* Vendor Cards */
+.vendor-list { display:flex; flex-direction:column; gap:14px; }
+.vendor-card {
+background:var(–white);
+border-radius:20px;
+padding:16px;
+display:flex; gap:14px;
+cursor:pointer;
+box-shadow:var(–shadow);
+transition:all 0.2s ease;
+align-items:center;
+}
+.vendor-card:hover { transform:translateY(-2px); box-shadow:var(–shadow-lg); }
+.vendor-avatar {
+width:60px; height:60px; border-radius:16px;
+background:linear-gradient(135deg,#FF6B2B,#FFB347);
+display:flex; align-items:center; justify-content:center;
+font-size:26px; flex-shrink:0;
+}
+.vendor-info { flex:1; }
+.vendor-name { font-family:‘Syne’,sans-serif; font-size:16px; font-weight:700; }
+.vendor-trade { font-size:13px; color:var(–primary); font-weight:600; margin:2px 0; }
+.vendor-meta { display:flex; gap:10px; align-items:center; margin-top:4px; }
+.vendor-rating { font-size:12px; color:var(–text-light); }
+.vendor-rating span { color:#FFD700; }
+.vendor-jobs { font-size:11px; color:var(–text-light); }
+.vendor-price { font-family:‘Syne’,sans-serif; font-size:15px; font-weight:700; color:var(–primary); white-space:nowrap; }
+.badge {
+display:inline-block; padding:3px 8px; border-radius:20px;
+font-size:10px; font-weight:600;
+}
+.badge-green { background:#D1FAE5; color:#065F46; }
+.badge-orange { background:#FEF3C7; color:#92400E; }
+/* ===== BOOKING SCREEN ===== */
+#bookingScreen { background:var(–bg); }
+.booking-vendor-info {
+background:linear-gradient(135deg,#1A1A2E,#2D2D4E);
+padding:24px 20px;
+color:#fff;
+display:flex; gap:16px; align-items:center;
+}
+.booking-avatar {
+width:70px; height:70px; border-radius:18px;
+background:linear-gradient(135deg,#FF6B2B,#FFB347);
+display:flex; align-items:center; justify-content:center;
+font-size:30px; flex-shrink:0;
+}
+.booking-vname { font-family:‘Syne’,sans-serif; font-size:20px; font-weight:800; }
+.booking-vtrade { color:var(–primary); font-size:14px; font-weight:600; margin:2px 0; }
+.booking-vrating { font-size:13px; color:rgba(255,255,255,0.7); }
+.form-section { padding:20px; display:flex; flex-direction:column; gap:14px; }
+.form-label { font-size:13px; font-weight:600; color:var(–text-light); margin-bottom:6px; display:block; }
+.form-input {
+width:100%; padding:14px 16px;
+border:2px solid #E5E7EB; border-radius:14px;
+font-size:14px; font-family:‘DM Sans’,sans-serif;
+background:#fff; color:var(–text);
+outline:none; transition:border 0.2s;
+}
+.form-input:focus { border-color:var(–primary); }
+.time-slots { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.time-slot {
+padding:10px 6px; border-radius:12px;
+border:2px solid #E5E7EB; background:#fff;
+text-align:center; font-size:12px; font-weight:600;
+cursor:pointer; transition:all 0.2s;
+}
+.time-slot.selected { background:var(–primary); border-color:var(–primary); color:#fff; }
+.book-btn {
+background:linear-gradient(135deg,#FF6B2B,#FF8C42);
+color:#fff; border:none; border-radius:16px;
+padding:18px; font-size:16px; font-weight:700;
+font-family:‘Syne’,sans-serif; letter-spacing:0.5px;
+cursor:pointer; margin:0 20px 20px;
+box-shadow:0 4px 20px rgba(255,107,43,0.4);
+transition:all 0.2s;
+}
+.book-btn:active { transform:scale(0.98); }
+/* ===== SUCCESS ===== */
+#successScreen {
+background:linear-gradient(135deg,#10B981,#34D399);
+align-items:center; justify-content:center; flex-direction:column;
+gap:16px; padding:40px 24px; text-align:center;
+}
+.success-icon { font-size:80px; animation:pop 0.5s ease; }
+@keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
+.success-title { font-family:‘Syne’,sans-serif; font-size:28px; font-weight:800; color:#fff; }
+.success-sub { color:rgba(255,255,255,0.85); font-size:15px; line-height:1.6; }
+.success-card {
+background:#fff; border-radius:20px; padding:20px;
+width:100%; max-width:320px;
+box-shadow:0 8px 32px rgba(0,0,0,0.15);
+}
+.success-card-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:14px; }
+.success-card-row span:first-child { color:var(–text-light); }
+.success-card-row span:last-child { font-weight:600; color:var(–text); }
+.back-home-btn {
+background:#fff; color:var(–success); border:none; border-radius:14px;
+padding:16px 32px; font-size:15px; font-weight:700;
+font-family:‘Syne’,sans-serif; cursor:pointer; margin-top:8px;
+box-shadow:0 4px 16px rgba(0,0,0,0.15);
+}
+/* ===== VENDOR HOME ===== */
+#vendorHome { background:var(–bg); }
+.vendor-header {
+background:linear-gradient(135deg,#1A1A2E,#2D2D4E);
+padding:24px 20px;
+color:#fff;
+}
+.vendor-header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.vendor-header-name { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; }
+.vendor-header-trade { font-size:13px; color:var(–primary); font-weight:600; margin-top:2px; }
+.online-toggle {
+display:flex; align-items:center; gap:8px;
+background:rgba(255,255,255,0.1); padding:8px 14px; border-radius:20px;
+cursor:pointer; border:none; color:#fff; font-family:‘DM Sans’,sans-serif; font-size:13px;
+}
+.toggle-dot { width:10px; height:10px; border-radius:50%; background:#6B7280; transition:background 0.3s; }
+.toggle-dot.online { background:var(–success); }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stat-box {
+background:rgba(255,255,255,0.1);
+border-radius:14px; padding:12px; text-align:center;
+}
+.stat-num { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; color:#fff; }
+.stat-label { font-size:11px; color:rgba(255,255,255,0.6); margin-top:2px; }
+.job-card {
+background:var(–white); border-radius:20px; padding:16px;
+box-shadow:var(–shadow); margin-bottom:14px;
+}
+.job-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+.job-customer { font-family:‘Syne’,sans-serif; font-size:15px; font-weight:700; }
+.job-service { font-size:13px; color:var(–primary); font-weight:600; margin-top:2px; }
+.job-details { font-size:13px; color:var(–text-light); margin:6px 0; display:flex; gap:12px; flex-wrap:wrap; }
+.job-actions { display:flex; gap:8px; margin-top:10px; }
+.btn-accept {
+flex:1; background:var(–success); color:#fff; border:none;
+padding:12px; border-radius:12px; font-size:13px; font-weight:700;
+font-family:‘Syne’,sans-serif; cursor:pointer;
+}
+.btn-decline {
+flex:1; background:#FEE2E2; color:#DC2626; border:none;
+padding:12px; border-radius:12px; font-size:13px; font-weight:700;
+font-family:‘Syne’,sans-serif; cursor:pointer;
+}
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+position:fixed; bottom:0; left:0; right:0;
+background:#fff; display:flex;
+box-shadow:0 -2px 16px rgba(0,0,0,0.08);
+z-index:100; padding-bottom:env(safe-area-inset-bottom,0);
+}
+.nav-item {
+flex:1; padding:12px 0; display:flex; flex-direction:column;
+align-items:center; gap:4px; cursor:pointer;
+font-size:10px; font-weight:600; color:var(–text-light);
+border:none; background:none; font-family:‘DM Sans’,sans-serif;
+transition:color 0.2s;
+}
+.nav-item.active { color:var(–primary); }
+.nav-icon { font-size:22px; }
+/* scroll padding for bottom nav */
+.has-bottom-nav { padding-bottom:70px; }
+/* ===== PROFILE ===== */
+.profile-header {
+background:linear-gradient(135deg,#FF6B2B,#FF8C42);
+padding:32px 20px 24px; text-align:center; color:#fff;
+}
+.profile-avatar {
+width:80px; height:80px; border-radius:50%;
+background:rgba(255,255,255,0.2); margin:0 auto 12px;
+display:flex; align-items:center; justify-content:center;
+font-size:36px; border:3px solid rgba(255,255,255,0.5);
+}
+.profile-name { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; }
+.profile-phone { font-size:14px; opacity:0.85; margin-top:4px; }
+.profile-menu { padding:20px; display:flex; flex-direction:column; gap:10px; }
+.menu-item {
+background:#fff; border-radius:16px; padding:16px;
+display:flex; align-items:center; gap:12px;
+cursor:pointer; box-shadow:var(–shadow);
+border:none; width:100%; font-family:‘DM Sans’,sans-serif;
+transition:all 0.2s;
+}
+.menu-item:active { transform:scale(0.98); }
+.menu-emoji { font-size:22px; }
+.menu-text { flex:1; text-align:left; }
+.menu-title { font-size:15px; font-weight:600; color:var(–text); }
+.menu-sub { font-size:12px; color:var(–text-light); margin-top:1px; }
+.menu-arrow { color:var(–text-light); }
+/* ===== VENDOR REGISTER ===== */
+#vendorRegister { background:var(–bg); }
+.register-header {
+background:linear-gradient(135deg,#1A1A2E,#2D2D4E);
+padding:24px 20px; color:#fff;
+}
+.register-title { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; }
+.register-sub { font-size:13px; color:rgba(255,255,255,0.7); margin-top:4px; }
+.trade-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.trade-item {
+background:#fff; border-radius:16px; padding:16px;
+display:flex; align-items:center; gap:10px;
+cursor:pointer; border:2px solid #E5E7EB;
+transition:all 0.2s; box-shadow:var(–shadow);
+}
+.trade-item.selected { border-color:var(–primary); background:#FFF7F4; }
+.trade-emoji { font-size:24px; }
+.trade-name { font-size:14px; font-weight:600; }
+/* Utility */
+.mt-8 { margin-top:8px; }
+.mt-16 { margin-top:16px; }
+.text-center { text-align:center; }
+.text-muted { color:var(–text-light); font-size:13px; }
+/* Fade in animation */
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body><!-- SPLASH --><div id="splash" class="screen active">
+  <div class="splash-icon">⚡</div>
+  <div class="splash-logo">Quick<span>Fix</span></div>
+  <div class="splash-sub">Home Services at your fingertip</div>
+</div><!-- ROLE SELECT --><div id="roleSelect" class="screen">
+  <div class="role-title">Welcome to<br><span>QuickFix</span> 👋</div>
+  <div style="color:rgba(255,255,255,0.5);font-size:14px;text-align:center;">Who are you?</div>
+  <div class="role-cards">
+    <div class="role-card" onclick="goCustomerHome()">
+      <div class="role-icon">🏠</div>
+      <div class="role-info">
+        <h3>Customer</h3>
+        <p>Book home services instantly</p>
+      </div>
+      <div class="role-arrow">→</div>
+    </div>
+    <div class="role-card" onclick="showScreen('vendorRegister')">
+      <div class="role-icon">🔧</div>
+      <div class="role-info">
+        <h3>Service Provider</h3>
+        <p>Electrician, Plumber, Painter...</p>
+      </div>
+      <div class="role-arrow">→</div>
+    </div>
+  </div>
+</div><!-- CUSTOMER HOME --><div id="customerHome" class="screen">
+  <div class="home-header">
+    <div class="home-greeting">📍 Badlapur, Mumbai</div>
+    <div class="home-name">Find a Service ⚡</div>
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Search electrician, plumber..." oninput="filterVendors(this.value)">
+    </div>
+  </div><div class="has-bottom-nav" id="customerScroll">
+    <div class="section">
+      <div class="section-title">Our Services</div>
+      <div class="categories">
+        <div class="cat-item selected" onclick="selectCat(this,'all')">
+          <span class="cat-emoji">🔍</span>
+          <span class="cat-label">All</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'Electrician')">
+          <span class="cat-emoji">⚡</span>
+          <span class="cat-label">Electric</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'Plumber')">
+          <span class="cat-emoji">🔧</span>
+          <span class="cat-label">Plumber</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'Painter')">
+          <span class="cat-emoji">🎨</span>
+          <span class="cat-label">Painter</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'Carpenter')">
+          <span class="cat-emoji">🪚</span>
+          <span class="cat-label">Carpenter</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'Cleaner')">
+          <span class="cat-emoji">🧹</span>
+          <span class="cat-label">Cleaner</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'AC Repair')">
+          <span class="cat-emoji">❄️</span>
+          <span class="cat-label">AC Repair</span>
+        </div>
+        <div class="cat-item" onclick="selectCat(this,'Pest Control')">
+          <span class="cat-emoji">🐜</span>
+          <span class="cat-label">Pest</span>
+        </div>
+      </div>
+    </div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-title">Available Near You</div>
+  <div class="vendor-list" id="vendorList"></div>
+</div>
+
+
+</div><div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('home',this)">
+      <span class="nav-icon">🏠</span>Home
+    </button>
+    <button class="nav-item" onclick="switchTab('bookings',this)">
+      <span class="nav-icon">📋</span>Bookings
+    </button>
+    <button class="nav-item" onclick="switchTab('profile',this)">
+      <span class="nav-icon">👤</span>Profile
+    </button>
+  </div>
+</div><!-- BOOKING SCREEN --><div id="bookingScreen" class="screen">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('customerHome')">←</button>
+    <span class="topbar-title">Book Service</span>
+  </div><div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="fade-in">
+    <div class="booking-vendor-info" id="bookingVendorInfo"></div>
+
+<div class="form-section">
+  <div>
+    <label class="form-label">📍 Your Address</label>
+    <input type="text" class="form-input" placeholder="Enter your full address" id="bookingAddress">
+  </div>
+  <div>
+    <label class="form-label">📝 Problem Description</label>
+    <textarea class="form-input" rows="3" placeholder="Describe what needs to be fixed..." id="bookingDesc" style="resize:none;"></textarea>
+  </div>
+  <div>
+    <label class="form-label">📅 Select Date</label>
+    <input type="date" class="form-input" id="bookingDate">
+  </div>
+  <div>
+    <label class="form-label">⏰ Select Time Slot</label>
+    <div class="time-slots">
+      <div class="time-slot" onclick="selectSlot(this)">9:00 AM</div>
+      <div class="time-slot" onclick="selectSlot(this)">11:00 AM</div>
+      <div class="time-slot" onclick="selectSlot(this)">1:00 PM</div>
+      <div class="time-slot" onclick="selectSlot(this)">3:00 PM</div>
+      <div class="time-slot" onclick="selectSlot(this)">5:00 PM</div>
+      <div class="time-slot" onclick="selectSlot(this)">7:00 PM</div>
+    </div>
+  </div>
+</div>
+
+
+</div><button class="book-btn" onclick="confirmBooking()">✅ Confirm Booking</button>
+</div><!-- SUCCESS SCREEN --><div id="successScreen" class="screen">
+  <div class="success-icon">🎉</div>
+  <div class="success-title">Booking Confirmed!</div>
+  <div class="success-sub">Your service provider will arrive<br>at the scheduled time.</div>
+  <div class="success-card" id="successDetails"></div>
+  <button class="back-home-btn" onclick="goCustomerHome()">← Back to Home</button>
+</div><!-- VENDOR REGISTER --><div id="vendorRegister" class="screen">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('roleSelect')">←</button>
+    <span class="topbar-title">Join as Provider</span>
+  </div>
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;">
+    <div class="register-header">
+      <div class="register-title">Register as Service Provider 🔧</div>
+      <div class="register-sub">Earn money on your schedule</div>
+    </div>
+    <div class="form-section">
+      <div>
+        <label class="form-label">👤 Full Name</label>
+        <input type="text" class="form-input" placeholder="Your full name" id="vName">
+      </div>
+      <div>
+        <label class="form-label">📱 Phone Number</label>
+        <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX" id="vPhone">
+      </div>
+      <div>
+        <label class="form-label">🛠️ Your Trade / Skill</label>
+        <div class="trade-grid" id="tradeGrid">
+          <div class="trade-item selected" onclick="selectTrade(this)"><span class="trade-emoji">⚡</span><span class="trade-name">Electrician</span></div>
+          <div class="trade-item" onclick="selectTrade(this)"><span class="trade-emoji">🔧</span><span class="trade-name">Plumber</span></div>
+          <div class="trade-item" onclick="selectTrade(this)"><span class="trade-emoji">🎨</span><span class="trade-name">Painter</span></div>
+          <div class="trade-item" onclick="selectTrade(this)"><span class="trade-emoji">🪚</span><span class="trade-name">Carpenter</span></div>
+          <div class="trade-item" onclick="selectTrade(this)"><span class="trade-emoji">🧹</span><span class="trade-name">Cleaner</span></div>
+          <div class="trade-item" onclick="selectTrade(this)"><span class="trade-emoji">❄️</span><span class="trade-name">AC Repair</span></div>
+        </div>
+      </div>
+      <div>
+        <label class="form-label">💰 Rate per Hour (₹)</label>
+        <input type="number" class="form-input" placeholder="e.g. 300" id="vRate">
+      </div>
+      <div>
+        <label class="form-label">📍 Your Area</label>
+        <input type="text" class="form-input" placeholder="e.g. Badlapur, Ambernath..." id="vArea">
+      </div>
+    </div>
+    <button class="book-btn" onclick="registerVendor()">🚀 Register Now — It's Free!</button>
+  </div>
+</div><!-- VENDOR HOME --><div id="vendorHome" class="screen">
+  <div class="vendor-header">
+    <div class="vendor-header-top">
+      <div>
+        <div class="vendor-header-name" id="vHeaderName">Rahul Sharma</div>
+        <div class="vendor-header-trade" id="vHeaderTrade">⚡ Electrician</div>
+      </div>
+      <button class="online-toggle" onclick="toggleOnline(this)" id="onlineBtn">
+        <div class="toggle-dot online" id="onlineDot"></div>
+        <span id="onlineText">Online</span>
+      </button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">₹2,400</div><div class="stat-label">Today</div></div>
+      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Jobs Done</div></div>
+      <div class="stat-box"><div class="stat-num">4.8⭐</div><div class="stat-label">Rating</div></div>
+    </div>
+  </div><div class="has-bottom-nav" style="overflow-y:auto;">
+    <div class="section">
+      <div class="section-title">New Requests 🔔</div>
+      <div id="jobRequests">
+        <div class="job-card fade-in">
+          <div class="job-card-header">
+            <div>
+              <div class="job-customer">Priya Mehta</div>
+              <div class="job-service">⚡ Electrical Repair</div>
+            </div>
+            <span class="badge badge-orange">New</span>
+          </div>
+          <div class="job-details">
+            <span>📍 Sector 12, Badlapur</span>
+            <span>📅 Today 3:00 PM</span>
+            <span>💰 ₹400-600</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-light)">Ceiling fan not working, needs immediate repair</div>
+          <div class="job-actions">
+            <button class="btn-accept" onclick="acceptJob(this)">✅ Accept</button>
+            <button class="btn-decline" onclick="declineJob(this)">✗ Decline</button>
+          </div>
+        </div>
+        <div class="job-card fade-in">
+          <div class="job-card-header">
+            <div>
+              <div class="job-customer">Amit Verma</div>
+              <div class="job-service">⚡ Wiring Work</div>
+            </div>
+            <span class="badge badge-orange">New</span>
+          </div>
+          <div class="job-details">
+            <span>📍 Station Road, Badlapur</span>
+            <span>📅 Tomorrow 11:00 AM</span>
+            <span>💰 ₹800-1200</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-light)">New room wiring for 2 BHK flat</div>
+          <div class="job-actions">
+            <button class="btn-accept" onclick="acceptJob(this)">✅ Accept</button>
+            <button class="btn-decline" onclick="declineJob(this)">✗ Decline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><div class="bottom-nav">
+    <button class="nav-item active">
+      <span class="nav-icon">📋</span>Jobs
+    </button>
+    <button class="nav-item">
+      <span class="nav-icon">💰</span>Earnings
+    </button>
+    <button class="nav-item">
+      <span class="nav-icon">👤</span>Profile
+    </button>
+  </div>
+</div><script>
+// ===== DATA =====
+const vendors = [
+  { id:1, name:"Rajesh Kumar", trade:"Electrician", emoji:"⚡", rating:4.9, jobs:142, price:"₹300/hr", area:"Badlapur", available:true },
+  { id:2, name:"Suresh Patil", trade:"Plumber", emoji:"🔧", rating:4.7, jobs:98, price:"₹250/hr", area:"Ambernath", available:true },
+  { id:3, name:"Anil Sharma", trade:"Painter", emoji:"🎨", rating:4.8, jobs:67, price:"₹400/hr", area:"Badlapur", available:false },
+  { id:4, name:"Manoj Yadav", trade:"Carpenter", emoji:"🪚", rating:4.6, jobs:55, price:"₹350/hr", area:"Badlapur", available:true },
+  { id:5, name:"Deepak Singh", trade:"Cleaner", emoji:"🧹", rating:4.5, jobs:200, price:"₹200/hr", area:"Ulhasnagar", available:true },
+  { id:6, name:"Vikram Nair", trade:"AC Repair", emoji:"❄️", rating:4.9, jobs:88, price:"₹500/hr", area:"Badlapur", available:true },
+  { id:7, name:"Santosh More", trade:"Electrician", emoji:"⚡", rating:4.7, jobs:110, price:"₹280/hr", area:"Ambernath", available:false },
+  { id:8, name:"Ganesh Pawar", trade:"Plumber", emoji:"🔧", rating:4.8, jobs:76, price:"₹270/hr", area:"Badlapur", available:true },
+];
+
+let selectedVendor = null;
+let selectedSlot = null;
+let currentFilter = 'all';
+let isOnline = true;
+
+// ===== INIT =====
+setTimeout(() => { showScreen('roleSelect'); }, 2000);
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goCustomerHome() {
+  renderVendors(vendors);
+  showScreen('customerHome');
+}
+
+// ===== VENDORS =====
+function renderVendors(list) {
+  const container = document.getElementById('vendorList');
+  if (!list.length) {
+    container.innerHTML = '<div class="text-center text-muted" style="padding:30px">No vendors found 😔</div>';
+    return;
+  }
+  container.innerHTML = list.map(v => `
+    <div class="vendor-card fade-in" onclick="openBooking(${v.id})">
+      <div class="vendor-avatar">${v.emoji}</div>
+      <div class="vendor-info">
+        <div class="vendor-name">${v.name}</div>
+        <div class="vendor-trade">${v.trade}</div>
+        <div class="vendor-meta">
+          <span class="vendor-rating"><span>⭐</span> ${v.rating} · ${v.jobs} jobs</span>
+          <span class="badge ${v.available ? 'badge-green' : 'badge-orange'}">${v.available ? 'Available' : 'Busy'}</span>
+        </div>
+      </div>
+      <div class="vendor-price">${v.price}</div>
+    </div>
+  `).join('');
+}
+
+function selectCat(el, cat) {
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  currentFilter = cat;
+  filterVendors('');
+}
+
+function filterVendors(query) {
+  let filtered = vendors;
+  if (currentFilter !== 'all') filtered = filtered.filter(v => v.trade === currentFilter);
+  if (query) filtered = filtered.filter(v =>
+    v.name.toLowerCase().includes(query.toLowerCase()) ||
+    v.trade.toLowerCase().includes(query.toLowerCase())
+  );
+  renderVendors(filtered);
+}
+
+// ===== BOOKING =====
+function openBooking(id) {
+  selectedVendor = vendors.find(v => v.id === id);
+  const info = document.getElementById('bookingVendorInfo');
+  info.innerHTML = `
+    <div class="booking-avatar">${selectedVendor.emoji}</div>
+    <div>
+      <div class="booking-vname">${selectedVendor.name}</div>
+      <div class="booking-vtrade">${selectedVendor.trade}</div>
+      <div class="booking-vrating">⭐ ${selectedVendor.rating} · ${selectedVendor.jobs} jobs done · ${selectedVendor.price}</div>
+    </div>
+  `;
+  // set min date to today
+  document.getElementById('bookingDate').min = new Date().toISOString().split('T')[0];
+  selectedSlot = null;
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  showScreen('bookingScreen');
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSlot = el.textContent;
+}
+
+function confirmBooking() {
+  const addr = document.getElementById('bookingAddress').value.trim();
+  const date = document.getElementById('bookingDate').value;
+  if (!addr) { alert('Please enter your address!'); return; }
+  if (!date) { alert('Please select a date!'); return; }
+  if (!selectedSlot) { alert('Please select a time slot!'); return; }
+
+  const details = document.getElementById('successDetails');
+  details.innerHTML = `
+    <div class="success-card-row"><span>👷 Provider</span><span>${selectedVendor.name}</span></div>
+    <div class="success-card-row"><span>🛠️ Service</span><span>${selectedVendor.trade}</span></div>
+    <div class="success-card-row"><span>📅 Date</span><span>${date}</span></div>
+    <div class="success-card-row"><span>⏰ Time</span><span>${selectedSlot}</span></div>
+    <div class="success-card-row"><span>📍 Address</span><span style="max-width:150px;text-align:right">${addr}</span></div>
+    <div class="success-card-row"><span>💰 Rate</span><span>${selectedVendor.price}</span></div>
+  `;
+  showScreen('successScreen');
+}
+
+// ===== VENDOR REGISTER =====
+function selectTrade(el) {
+  document.querySelectorAll('.trade-item').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function registerVendor() {
+  const name = document.getElementById('vName').value.trim();
+  const phone = document.getElementById('vPhone').value.trim();
+  const trade = document.querySelector('.trade-item.selected .trade-name')?.textContent;
+  const rate = document.getElementById('vRate').value;
+  const area = document.getElementById('vArea').value.trim();
+
+  if (!name || !phone) { alert('Please fill name and phone!'); return; }
+
+  document.getElementById('vHeaderName').textContent = name;
+  document.getElementById('vHeaderTrade').textContent =
+    (document.querySelector('.trade-item.selected .trade-emoji')?.textContent || '🔧') + ' ' + trade;
+
+  showScreen('vendorHome');
+}
+
+// ===== VENDOR ACTIONS =====
+function toggleOnline(btn) {
+  isOnline = !isOnline;
+  const dot = document.getElementById('onlineDot');
+  const txt = document.getElementById('onlineText');
+  dot.classList.toggle('online', isOnline);
+  txt.textContent = isOnline ? 'Online' : 'Offline';
+}
+
+function acceptJob(btn) {
+  const card = btn.closest('.job-card');
+  const name = card.querySelector('.job-customer').textContent;
+  card.querySelector('.job-actions').innerHTML = `<div style="text-align:center;width:100%;color:var(--success);font-weight:700;font-size:14px;padding:8px">✅ Accepted — Contact ${name}</div>`;
+  card.style.borderLeft = '4px solid var(--success)';
+}
+
+function declineJob(btn) {
+  const card = btn.closest('.job-card');
+  card.style.opacity = '0';
+  card.style.transition = 'opacity 0.3s';
+  setTimeout(() => card.remove(), 300);
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Init vendors
+renderVendors(vendors);
+</script></body>
+</html>
